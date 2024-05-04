@@ -1,0 +1,214 @@
+# Visual Studio temporary files
+.vs/
+
+# Rider project files
+.idea/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# NuGet
+*.nuget.props
+*.paket/paket.exe
+*.paket/paket.dependencies
+*.paket/paket.lock
+.paket/backup/
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+
+# Roslyn
+roslyn.analyzers/
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# JustCode
+.JustCode
+
+# TeamCity
+_TeamCity*
+
+# DotCover
+*.dotCover
+
+# NCrunch
+_NCrunch_*
+.*crunch*.local.xml
+nCrunchTemp_*
+
+# MightyMoose
+*.mm.*
+AutoTest.Net/
+
+# Web workbench (sass)
+.sass-cache/
+
+# Installshield output folder
+[Ee]xpress/
+
+# DocProject is a documentation generator add-in
+DocProject/buildhelp/
+DocProject/Help/*.HxT
+DocProject/Help/*.HxC
+DocProject/Help/*.hhc
+DocProject/Help/*.hhk
+DocProject/Help/*.hhp
+DocProject/Help/Html2
+DocProject/Help/html
+
+# Click-Once directory
+publish/
+
+# Publish Web Output
+*.Publish.xml
+*.pubxml
+*.publishproj
+
+# Microsoft Azure Web App publish settings. Comment the next line if you want to check them in
+# but be aware that sensitive credentials might be included.
+# PublishProfiles/
+
+# GhostDoc plugin setting file
+*.GhostDoc.xml
+
+# Node.js Tools for Visual Studio
+.vscode/
+
+# Visual Studio 7.x/15.vs/15.0/
+.vs/15.1/
+.vs/15.2/
+.vs/15.3/
+.vs/15.4/
+.vs/15.5/
+.vs/15.6/
+.vs/15.7/
+.vs/15.8/
+.vs/15.9/
+.vs/16.0/
+.vs/16.1/
+.vs/16.2/
+.vs/16.3/
+.vs/16.4/
+.vs/16.5/
+.vs/16.6/
+.vs/16.7/
+.vs/16.8/
+.vs/16.9/
+.vs/16.10/
+.vs/16.11/
+.vs/16.12/
+.vs/16.13/
+.vs/16.14/
+.vs/16.15/
+.vs/16.16/
+.vs/16.17/
+.vs/16.18/
+
+# Visual Studio 2022
+.vs/17.0/
+.vs/17.1/
+.vs/17.2/
+.vs/17.3/
+.vs/17.4/
+.vs/17.5/
+.vs/17.6/
+.vs/17.7/
+.vs/17.8/
+.vs/17.9/
+
+# Rider
+.idea/
+*.sln.iml
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Visual Studio Code
+.vscode/
+
+# Rider
+.idea/
+*.sln.iml
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# TeamCity
+_TeamCity*
+
+# DotCover
+*.dotCover
+
+# NCrunch
+*.ncrunch*
+.*crunch*.local.xml
+nCrunchTemp_*
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# Visual Studio caching
+.vs/

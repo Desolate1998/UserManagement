@@ -1,0 +1,158 @@
+﻿@using System.Text.Json
+@using System.Web
+@using Newtonsoft.Json
+@model UserManagement.Frontend.Web.Models.CreateUserViewModel
+@{
+    ViewData["Title"] = "Create User";
+}
+
+<div class="container">
+
+    <div class="card user-container">
+        <div>
+            <a asp-action="Index" class="btn btn-primary add-user-button">Back to List</a>
+        </div>
+
+        <h2>Create New Users</h2>
+        <div class="row">
+            <div class="col-md-6">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label class="control-label">First Name</label>
+                    <input  id="IFirstName" class="form-control" />
+                        <span id="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Last Name</label>
+                    <input id="ILastName" class="form-control" />
+                        <span id="LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Email</label>
+                    <input id="IEmail" class="form-control" />
+                        <span id="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <br />
+                    <input type="submit" id="submitButton" value="Create" class="btn btn-primary" />
+                    </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Groups:</label>
+                    <br />
+                    <span id="Group" class="text-danger"></span>
+                    @foreach (var item in Model.Groups)
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input group-checkbox" type="checkbox" id="@item.group.Code" name="Groups[@Model.Groups.IndexOf(item)].selected" value="true" checked="@item.selected" onclick="selectedGroupChange('@item.group.Code', @item.group.GetPermissions())" />
+                            <input type="hidden" name="Groups[@Model.Groups.IndexOf(item)].group.Code" value="@item.group.Code" />
+                            <label class="form-check-label" for="group_@item.group.Code">
+                                @item.group.Name
+                            </label>
+                        </div>
+                    }
+                </div>
+                <div class="form-group">
+                    <label>Permissions:</label>
+                    <ul class="list-group" id="permissionsList">
+                        @foreach (var item in Model.Permissions)
+                        {
+                            <li class="list-group-item permission" id="@item.Code">@item.Description</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    
+    <script>
+        let permissions = @Html.Raw(Json.Serialize(Model.Permissions))
+
+        let groups =@Html.Raw(Model.GetGroupJsonDetails())
+
+        function getSelectedGroups() {
+            var selectedItems = []
+            groups.forEach(item => {
+                if (item.selectedGroupChange === true) {
+                    selectedItems.push(item.Group.Code);
+                }
+            });
+            return selectedItems;
+        }
+        function clearErrors() {
+            $('#LastName').text('');
+            $('#Email').text('');
+            $('#Group').text('');
+        }
+
+        $(document).ready(function () {
+            $('#submitButton').click(function (event) {
+                var model = {
+                    Email: $('#IEmail').val(),
+                    LastName: $('#ILastName').val(),
+                    FirstName: $('#IFirstName').val(),
+                    Groups: getSelectedGroups(),
+                };
+                console.log(model)
+                $.ajax({
+                    url: '@Url.Action("Create", "Home")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(model),
+                    success: function (data) {
+                        alert('User Created');
+                        window.location.href = '/Home/Index';
+                    },
+                    error: function (xhr, status, error) {
+                        clearErrors()
+                        if (xhr.status === 401) {
+                            window.location.href = '/Authentication/Login'; 
+                        }
+
+                        var responseObj = JSON.parse(xhr.responseText)
+                                    console.log(responseObj)
+                        $.each(responseObj, function (key, value) {
+                            $('#' + key).text(value);
+                            console.log('#' + key)
+                        });
+                    }
+                });
+            });
+        });
+
+        var activePermissions = []
+        function selectedGroupChange(id, permissions) {
+            let grpItem = groups.find(group => group.Group.Code === id);
+            if ($(`#${id}`).is(':checked')) {
+                grpItem.selectedGroupChange = true;
+                activePermissions.push(...permissions);
+            } else {
+                for (const permission of permissions) {
+                    grpItem.selectedGroupChange = false;
+                    const index = activePermissions.indexOf(permission);
+                    if (index !== -1) {
+                        activePermissions.splice(index, 1);
+                    }
+                }
+            }
+            updatePermissionsDisplay()
+        }
+
+        function updatePermissionsDisplay() {
+            $('#permissionsList').children().each(function () {
+                const itemId = $(this).attr('id');
+                const index = activePermissions.indexOf(itemId);
+                if (index !== -1) {
+                    $(this).addClass('selectedPermission');
+                } else {
+                    $(this).removeClass('selectedPermission');
+                }
+            });
+        }
+    </script>
+}

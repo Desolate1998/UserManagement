@@ -1,0 +1,42 @@
+﻿@using UserManagement.Frontend.Web.Models
+@model LoginViewModel;
+@{
+    ViewData["Title"] = "Login";
+}
+
+
+<div class="container">
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-4">
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    <p>@ViewBag.Error</p>
+                </div>
+            }
+            @using (Html.BeginForm("Login", "Authentication", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="card">
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <img src="~/images/lock.png" alt="Lock Image" height="100px" width="100px" />
+                        </div>
+                        <div class="form-group">
+                            @Html.TextBoxFor(x => x.Email, new { @class = "form-control", placeholder = "Email" })
+                            @Html.ValidationMessageFor(x=> x.Email, "", new { @class = "text-danger" })
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            @Html.PasswordFor(x=> x.Password, new { @class = "form-control", placeholder = "Password" })
+                            @Html.ValidationMessageFor(x => x.Password, "", new { @class = "text-danger" })
+                        </div>
+                        <br />
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

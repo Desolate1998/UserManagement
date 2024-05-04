@@ -1,0 +1,42 @@
+body {
+    background-color: #e9ecef
+}
+
+.login-card input{
+    margin:5px;
+}
+
+.login-card {
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.login-card-image{
+    display:flex;
+    width:100%;
+    justify-content:center;
+    margin:5px;
+}
+
+.card-container {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.user-container{
+    padding:10px;
+    margin:10px
+}
+
+.add-user-button{
+    max-width:150px;
+}
+.selectedPermission {
+    transition: .1s;
+    background-color: #27A745;
+}

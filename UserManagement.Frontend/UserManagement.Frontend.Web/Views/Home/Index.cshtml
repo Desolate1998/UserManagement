@@ -1,0 +1,108 @@
+﻿@using System.Text.Json
+@using UserManagement.Frontend.Web.Models.APIModels
+@model List<User>;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container">
+    <div class="card user-container">
+    <h2>Users</h2>
+    <div class="row">
+            <div class="col-md-10">
+                <a asp-action="ViewStats" class="btn btn-secondary ">View Management Stats</a>
+            </div>
+            <div class="col-md-2">
+                <a asp-action="Create" class="btn btn-primary add-user-button">Create New User</a>
+            </div>
+        </div>
+        @if (ViewBag.Error != null)
+        {
+            <br/>
+            <div class="alert alert-danger" role="alert">
+                <p>@ViewBag.Error</p>
+            </div>
+            <br />
+        }
+        else if (ViewBag.Success != null)
+        {
+            <br />
+            <div class="alert alert-success" role="alert">
+                <p>@ViewBag.Success</p>
+            </div>
+            <br />
+        }
+        <table class="table">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                
+                <tr>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                    <td>@user.Email</td>
+                        <td>   <button type="button" class="btn btn-warning" onclick="editUser('@user.EntryId', '@user.FirstName', '@user.LastName', '@user.Email', '@JsonSerializer.Serialize(@user.UserGroups)')">Edit</button></td>
+                        <td>
+                            @using (Html.BeginForm("Delete", "Home", FormMethod.Post))
+                            {
+                                <input type="hidden" name="userId" value="@user.EntryId" />
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            }
+                        </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+</div>
+
+<script>
+    function editUser(userId, firstName, lastName, email, userGroup) {
+        var form = document.createElement('form');
+        form.setAttribute('method', 'get');
+        form.setAttribute('action', '/Home/Edit');
+
+        var userIdField = document.createElement('input');
+        userIdField.setAttribute('type', 'hidden');
+        userIdField.setAttribute('name', 'entryId');
+        userIdField.setAttribute('value', userId);
+        form.appendChild(userIdField);
+
+        var firstNameField = document.createElement('input');
+        firstNameField.setAttribute('type', 'hidden');
+        firstNameField.setAttribute('name', 'firstName');
+        firstNameField.setAttribute('value', firstName);
+        form.appendChild(firstNameField);
+
+        var lastNameField = document.createElement('input');
+        lastNameField.setAttribute('type', 'hidden');
+        lastNameField.setAttribute('name', 'lastName');
+        lastNameField.setAttribute('value', lastName);
+        form.appendChild(lastNameField);
+
+        var emailField = document.createElement('input');
+        emailField.setAttribute('type', 'hidden');
+        emailField.setAttribute('name', 'email');
+        emailField.setAttribute('value', email);
+        form.appendChild(emailField);
+
+        var userGroupField = document.createElement('input');
+        userGroupField.setAttribute('type', 'hidden');
+        userGroupField.setAttribute('name', 'extraInformation');
+        userGroupField.setAttribute('value', userGroup);
+        form.appendChild(userGroupField);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>

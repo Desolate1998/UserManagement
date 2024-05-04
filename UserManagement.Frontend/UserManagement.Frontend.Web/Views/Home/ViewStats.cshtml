@@ -1,0 +1,111 @@
+﻿@using UserManagement.Frontend.Web.Models.Helper
+@model ApplicationStats
+@{
+    ViewData["Title"] = "View Stats";
+}
+
+@if (ViewBag.Error != null)
+{
+    <br />
+    <div class="alert alert-danger" role="alert">
+        <p>@ViewBag.Error</p>
+    </div>
+    <br />
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4">Application Stats</h2>
+    <div>
+        <a asp-action="Index" class="btn btn-primary add-user-button">Back to List</a>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Users Count</h5>
+                    <p class="card-text">@Model.UsersCount</p>
+                </div>
+            </div>
+            <br />
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3>Group Stats</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Group Name</th>
+                                <th>Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var groupStat in Model.GroupStats)
+                            {
+                                <tr>
+                                    <td>@groupStat.Key</td>
+                                    <td>@groupStat.Value</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card mt-4">
+                <div class="card-body">
+                    <canvas id="groupStatsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var groupStats = @Html.Raw(Json.Serialize(Model.GroupStats))
+        var ctx = document.getElementById('groupStatsChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(groupStats),
+                datasets: [{
+                    label: 'Group Stats',
+                    data: Object.values(groupStats),
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Group Stats Chart'
+                    }
+                }
+            }
+        });
+    </script>
+
+}
