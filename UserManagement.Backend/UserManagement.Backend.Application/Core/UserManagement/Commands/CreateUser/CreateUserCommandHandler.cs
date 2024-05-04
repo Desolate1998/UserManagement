@@ -10,28 +10,40 @@ public class CreateUserCommandHandler(IUserManagementRepository repository) : IR
 {
     async Task<ErrorOr<User>> IRequestHandler<CreateUserCommand, ErrorOr<User>>.Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        if (!await repository.CheckIfAdminUserAsync(request.AuthorizationDetails.UserId))
+        await repository.BeginTransactionAsync();
+        try
         {
-            return Error.Unauthorized("Unauthorized");
+            if (!await repository.CheckIfAdminUserAsync(request.AuthorizationDetails.UserId))
+            {
+                return Error.Unauthorized("Unauthorized");
+            }
+            if (await repository.CheckIfUserExistsAsync(request.Data.Email.ToLower()))
+            {
+                return Error.Conflict("Email", "User Already exists");
+            }
+            var user = User.Create(request.Data.FirstName,
+                                   request.Data.LastName,
+                                   request.Data.Email.ToLower(),
+                                   PasswordHelper.GenerateStrongPassword());
+
+            user = await repository.AddUserAsync(user);
+
+            await repository.AssignUserGroupsAsync(request.Data.Groups.Select(x => UserGroup.Create(user.EntryId, x)).ToList());
+            await repository.CommitTransactionAsync();
+            return new User()
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                EntryId = user.EntryId
+            };
         }
-        if (await repository.CheckIfUserExistsAsync(request.Data.Email.ToLower()))
+        catch
         {
-            return Error.Conflict("Email", "User Already exists");
+            await repository.RollbackTransactionAsync();
+            throw;
         }
-        var user = User.Create(request.Data.FirstName,
-                               request.Data.LastName,
-                               request.Data.Email.ToLower(),
-                               PasswordHelper.GenerateStrongPassword());
-
-        user = await repository.AddUserAsync(user);
-
-        await repository.AssignUserGroupsAsync(request.Data.Groups.Select(x => UserGroup.Create(user.EntryId, x)).ToList());
-        return new User() { 
-            Email = user.Email ,
-            FirstName = user.FirstName ,
-            LastName = user.LastName ,
-            EntryId = user.EntryId
-        };
+  ;
     }
 }
 

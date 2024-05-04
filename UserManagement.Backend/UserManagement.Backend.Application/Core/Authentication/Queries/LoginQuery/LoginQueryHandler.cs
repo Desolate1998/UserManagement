@@ -11,16 +11,6 @@ namespace UserManagement.Backend.Application.Core.Authentication.Queries.LoginQu
 
 public class LoginQueryHandler(IAuthenticationRepository repository, IJwtTokenGenerator tokenHelper) : IRequestHandler<LoginQuery, ErrorOr<LoginQueryResponseDTO>>
 {
-
-    /// <summary>
-    /// Handles the login query.
-    /// <list type="number">
-    /// <item> Check if the user exists</item>
-    /// <item> Check if the password provided rehashed is the same as the one stored in the database under the user record</item>
-    /// <item> Log the login attempt into the database</item>
-    /// <item> Generate JWT token.</item>
-    /// </list>
-    /// </summary>
     async Task<ErrorOr<LoginQueryResponseDTO>> IRequestHandler<LoginQuery, ErrorOr<LoginQueryResponseDTO>>.Handle(LoginQuery request, CancellationToken cancellationToken)
     {
         var user = await repository.GetUserByEmailAsync(request.Data.Email.ToLower());

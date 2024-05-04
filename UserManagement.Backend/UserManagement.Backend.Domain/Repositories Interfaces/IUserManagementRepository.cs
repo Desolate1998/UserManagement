@@ -5,6 +5,9 @@ namespace UserManagement.Backend.Domain.Repositories_Interfaces;
 
 public interface IUserManagementRepository
 {
+    public Task BeginTransactionAsync();
+    public Task CommitTransactionAsync();
+    public Task RollbackTransactionAsync();
     public Task<User> AddUserAsync(User user);
     public Task UpdateUserAsync(User user);
     public Task DeleteUserAsync(long userId);

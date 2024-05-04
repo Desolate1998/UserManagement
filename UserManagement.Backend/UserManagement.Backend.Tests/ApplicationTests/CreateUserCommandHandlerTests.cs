@@ -33,7 +33,6 @@ public class CreateUserCommandHandlerTests
         var CreateUserRequestDTO = new CreateUserRequestDTO() {
             Email = "meow@meow",
             FirstName = "meow",
-            Password = "meow",
             LastName = "meow",
             Groups = ["GRP1"]
         };
@@ -80,7 +79,6 @@ public class CreateUserCommandHandlerTests
         {
             Email = "meow@meow",
             FirstName = "meow",
-            Password = "meow",
             LastName = "meow",
             Groups = ["GRP1"]
         };
@@ -128,7 +126,6 @@ public class CreateUserCommandHandlerTests
         {
             Email = "meow@meow",
             FirstName = "meow",
-            Password = "meow",
             LastName = "meow",
             Groups = ["GRP1"]
         };

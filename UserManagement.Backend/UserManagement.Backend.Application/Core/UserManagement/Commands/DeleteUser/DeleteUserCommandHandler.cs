@@ -13,6 +13,7 @@ public class DeleteUserCommandHandler(IUserManagementRepository repository) : IR
             return Error.Unauthorized("Unauthorized");
         }
 
+
         if(!await repository.CheckIfUserExistsAsync(request.Data.UserId))
         {
             return Error.NotFound("Email", "User was not found");

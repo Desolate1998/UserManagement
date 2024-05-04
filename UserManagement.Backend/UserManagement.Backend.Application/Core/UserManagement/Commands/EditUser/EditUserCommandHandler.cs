@@ -31,19 +31,29 @@ public class EditUserCommandHandler(IUserManagementRepository repository) : IReq
         user.FirstName = request.Data.FirstName;
         user.FirstName = request.Data.LastName;
 
-        await repository.UpdateUserAsync(user);
-
-        var groupsToRemove = new List<string>();
-        var groupsToAdd = new List<UserGroup>();
-
-        if (request.Data.UserGroups.Where(x => x.Changed != UserGroupChangeCodes.None).Any())
+        try
         {
-            groupsToAdd = request.Data.UserGroups.Where(x => x.Changed == UserGroupChangeCodes.Added).Select(x => UserGroup.Create(user.EntryId, x.Value!)).ToList();
-            groupsToRemove = request.Data.UserGroups.Where(x => x.Changed == UserGroupChangeCodes.Removed).Select(x => x.Value!).ToList();
-            await repository.UpdateUserGroupsAsync(groupsToRemove, groupsToAdd, user.EntryId);
-            user = await repository.GetUserByIdAsync(request.Data.EntryId);
-        }
+            await repository.BeginTransactionAsync();
 
+            await repository.UpdateUserAsync(user);
+
+            var groupsToRemove = new List<string>();
+            var groupsToAdd = new List<UserGroup>();
+
+            if (request.Data.UserGroups.Where(x => x.Changed != UserGroupChangeCodes.None).Any())
+            {
+                groupsToAdd = request.Data.UserGroups.Where(x => x.Changed == UserGroupChangeCodes.Added).Select(x => UserGroup.Create(user.EntryId, x.Value!)).ToList();
+                groupsToRemove = request.Data.UserGroups.Where(x => x.Changed == UserGroupChangeCodes.Removed).Select(x => x.Value!).ToList();
+                await repository.UpdateUserGroupsAsync(groupsToRemove, groupsToAdd, user.EntryId);
+                user = await repository.GetUserByIdAsync(request.Data.EntryId);
+            }
+            await repository.CommitTransactionAsync();
+        }
+        catch 
+        {
+            await repository.RollbackTransactionAsync();
+            throw;
+        }
        return true;
     }
 }

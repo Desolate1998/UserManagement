@@ -1,5 +1,6 @@
 using Application;
 using Infrastructure;
+using UserManagement.Backend.Common.ExceptionHandlerMiddleware;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -17,6 +18,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseExceptionHandlerMiddleware();
 
 app.UseHttpsRedirection();
 

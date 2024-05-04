@@ -22,6 +22,22 @@ namespace UserManagement.Backend.Infrastructure.Repositories
             await context.SaveChangesAsync();
         }
 
+        async Task IUserManagementRepository.BeginTransactionAsync()
+        {
+            await context.Database.BeginTransactionAsync();
+        }
+
+        async Task IUserManagementRepository.CommitTransactionAsync()
+        {
+            await context.Database.CommitTransactionAsync();
+        }
+
+        async Task IUserManagementRepository.RollbackTransactionAsync()
+        {
+            await context.Database.RollbackTransactionAsync();
+
+        }
+
         async Task<bool> IUserManagementRepository.CheckIfAdminUserAsync(long userId)
         {
             return await context.UserGroups.Where(x => x.UserId == userId && x.GroupCode == "GRP0000001")
@@ -40,10 +56,20 @@ namespace UserManagement.Backend.Infrastructure.Repositories
 
         async Task IUserManagementRepository.DeleteUserAsync(long userId)
         {
-            await context.UserLoginHistory.Where(x => x.UserId == userId).ExecuteDeleteAsync();
-            await context.UserGroups.Where(x => x.UserId == userId).ExecuteDeleteAsync();
-            await context.Users.Where(x => x.EntryId == userId).ExecuteDeleteAsync();
-            await context.SaveChangesAsync();
+            try
+            {
+                await context.Database.BeginTransactionAsync();
+                await context.UserLoginHistory.Where(x => x.UserId == userId).ExecuteDeleteAsync();
+                await context.UserGroups.Where(x => x.UserId == userId).ExecuteDeleteAsync();
+                await context.Users.Where(x => x.EntryId == userId).ExecuteDeleteAsync();
+                await context.SaveChangesAsync();
+                await context.Database.CommitTransactionAsync();
+            }
+            catch 
+            {
+                await context.Database.RollbackTransactionAsync();
+                throw;
+            }
         }
 
         async Task<List<User>> IUserManagementRepository.GetAllUsersAsync()
