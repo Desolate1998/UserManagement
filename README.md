@@ -28,6 +28,8 @@ The frontend and backend are 2 separate projects, so you'll need to open them ea
 
 > **NOTE:** I have attached the database creation script as well.
 
+> **NOTE:** The login details to the admin user is email:meow@meow.com, password:meow.
+> **NOTE:** Normally you would send an email to the user to reset their password, this was not included where they would set/reset their password
 --- 
 
 ### 2. Database Design
